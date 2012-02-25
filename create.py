@@ -38,6 +38,7 @@ class Poster(object):
         url = cgi_url_base + '?' + urllib.urlencode(params)
         response = self.br.open(url)
         html = response.read()
+        time.sleep(1)
         nr = len(form_tag.findall(html)) - 1
         self.br.select_form(nr=nr)
 
@@ -56,8 +57,9 @@ class Poster(object):
                     raise
 
         print 'delfile', self.br['delfile']
-        self.br.submit()
-        print 'submit OK'
+        response = self.br.submit()
+        html = response.read().decode('sjis')
+        return schedule.get('title') in html
 
 
 def main():
@@ -71,9 +73,11 @@ def main():
         schedule = {}
         for i in xrange(len(data)):
             schedule[tsv_format[i]] = data[i]
-        poster.post(schedule.pop('year'), schedule.pop('month'),
+        posted = False
+        while not posted:
+            posted = poster.post(schedule.pop('year'), schedule.pop('month'),
                 schedule.pop('day'), schedule)
-        time.sleep(1)
+            time.sleep(1)
 
 if __name__ == '__main__':
     import codecs
