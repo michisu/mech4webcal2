@@ -73,10 +73,12 @@ def main():
         schedule = {}
         for i in xrange(len(data)):
             schedule[tsv_format[i]] = data[i]
+        year = schedule.pop('year')
+        month = schedule.pop('month')
+        day = schedule.pop('day')
         posted = False
         while not posted:
-            posted = poster.post(schedule.pop('year'), schedule.pop('month'),
-                schedule.pop('day'), schedule)
+            posted = poster.post(year, month, day, schedule)
             time.sleep(1)
 
 if __name__ == '__main__':
