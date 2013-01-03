@@ -66,7 +66,7 @@ def main():
     poster = Poster()
     for line in sys.stdin:
         line = line.strip('\n')
-        if not line: continue
+        if not line or line.startswith('#'): continue
         data = [d.decode('utf-8') for d in line.split('\t')]
         if len(data) != len(tsv_format): continue
         if data[0] == 'year': continue
